@@ -23,19 +23,15 @@ public class FitnessExample {
 
         public String createPage() throws Exception {
             if (pageData.hasAttribute("Test")) {
+                String setUp = "SetUp";
                 String mode = "setup";
                 if (includeSuiteSetup) {
                     String suiteSetupName = SuiteResponder.SUITE_SETUP_NAME;
                     WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(suiteSetupName, wikiPage);
-                    if (suiteSetup != null) {
-                        includePage(suiteSetup, mode);
-                    }
+                    includeInherited(suiteSetup, mode);
                 }
-                String setUp = "SetUp";
                 WikiPage setup = PageCrawlerImpl.getInheritedPage(setUp, wikiPage);
-                if (setup != null) {
-                    includePage(setup, mode);
-                }
+                includeInherited(setup, mode);
             }
 
             buffer.append(pageData.getContent());
@@ -43,21 +39,23 @@ public class FitnessExample {
                 String tearDown = "TearDown";
                 String mode = "teardown";
                 WikiPage teardown = PageCrawlerImpl.getInheritedPage(tearDown, wikiPage);
-                if (teardown != null) {
-                    includePage(teardown, mode);
-                }
+                includeInherited(teardown, mode);
                 if (includeSuiteSetup) {
-                    String suiteTeardownName = SuiteResponder.SUITE_TEARDOWN_NAME;
                     String mode1 = "teardown";
+                    String suiteTeardownName = SuiteResponder.SUITE_TEARDOWN_NAME;
                     WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(suiteTeardownName, wikiPage);
-                    if (suiteTeardown != null) {
-                        includePage(suiteTeardown, mode1);
-                    }
+                    includeInherited(suiteTeardown, mode1);
                 }
             }
 
             pageData.setContent(buffer.toString());
             return pageData.getHtml();
+        }
+
+        private void includeInherited(WikiPage teardown, String mode) throws Exception {
+            if (teardown != null) {
+                includePage(teardown, mode);
+            }
         }
 
         private void includePage(WikiPage setUp, String mode) throws Exception {
