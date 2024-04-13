@@ -23,28 +23,35 @@ public class FitnessExample {
 
         public String createPage() throws Exception {
             if (pageData.hasAttribute("Test")) {
+                String mode = "setup";
                 if (includeSuiteSetup) {
-                    WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_SETUP_NAME, wikiPage);
+                    String suiteSetupName = SuiteResponder.SUITE_SETUP_NAME;
+                    WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(suiteSetupName, wikiPage);
                     if (suiteSetup != null) {
-                        includePage(suiteSetup, "setup");
+                        includePage(suiteSetup, mode);
                     }
                 }
-                WikiPage setup = PageCrawlerImpl.getInheritedPage("SetUp", wikiPage);
+                String setUp = "SetUp";
+                WikiPage setup = PageCrawlerImpl.getInheritedPage(setUp, wikiPage);
                 if (setup != null) {
-                    includePage(setup, "setup");
+                    includePage(setup, mode);
                 }
             }
 
             buffer.append(pageData.getContent());
             if (pageData.hasAttribute("Test")) {
-                WikiPage teardown = PageCrawlerImpl.getInheritedPage("TearDown", wikiPage);
+                String tearDown = "TearDown";
+                String mode = "teardown";
+                WikiPage teardown = PageCrawlerImpl.getInheritedPage(tearDown, wikiPage);
                 if (teardown != null) {
-                    includePage(teardown, "teardown");
+                    includePage(teardown, mode);
                 }
                 if (includeSuiteSetup) {
-                    WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_TEARDOWN_NAME, wikiPage);
+                    String suiteTeardownName = SuiteResponder.SUITE_TEARDOWN_NAME;
+                    String mode1 = "teardown";
+                    WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(suiteTeardownName, wikiPage);
                     if (suiteTeardown != null) {
-                        includePage(suiteTeardown, "teardown");
+                        includePage(suiteTeardown, mode1);
                     }
                 }
             }
