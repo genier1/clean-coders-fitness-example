@@ -22,23 +22,32 @@ public class FitnessExample {
         }
 
         public String createPage() throws Exception {
-            if (pageData.hasAttribute("Test")) {
-                includeInherited("SetUp", "setup");
-                if (includeSuiteSetup) {
-                    includeInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
-                }
-            }
-
-            buffer.append(pageData.getContent());
-            if (pageData.hasAttribute("Test")) {
-                includeInherited("TearDown", "teardown");
-                if (includeSuiteSetup) {
-                    includeInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
-                }
+            if (isTestPage()) {
+                includeSetups();
+                buffer.append(pageData.getContent());
+                includeTearDowns();
             }
 
             pageData.setContent(buffer.toString());
             return pageData.getHtml();
+        }
+
+        private void includeTearDowns() throws Exception {
+            includeInherited("TearDown", "teardown");
+            if (includeSuiteSetup) {
+                includeInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
+            }
+        }
+
+        private void includeSetups() throws Exception {
+            includeInherited("SetUp", "setup");
+            if (includeSuiteSetup) {
+                includeInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
+            }
+        }
+
+        private boolean isTestPage() throws Exception {
+            return pageData.hasAttribute("Test");
         }
 
         private void includeInherited(String suiteSetupName, String mode) throws Exception {
